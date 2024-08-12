@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "394474271179",
+    "project_id": "appbeepfooddelivery",
+    "storage_bucket": "appbeepfooddelivery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394474271179:android:889156c3ed0c47ac0a864e",
+        "android_client_info": {
+          "package_name": "com.example.appbeepfooddelivery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkvSsNZyqEjt3jA1FSEOgnSm8zO8plsV0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
