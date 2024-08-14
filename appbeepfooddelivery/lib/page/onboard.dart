@@ -1,3 +1,4 @@
+import 'package:appbeepfooddelivery/page/login.dart';
 import 'package:appbeepfooddelivery/page/signup.dart';
 import 'package:appbeepfooddelivery/widget/content_model.dart';
 import 'package:appbeepfooddelivery/widget/widget_support.dart';
@@ -68,7 +69,7 @@ class _OnboardState extends State<Onboard> {
         GestureDetector(
           onTap: (){
             if(currentIndex == contents.length - 1){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUp()));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LogIn()));
             }
             _controller.nextPage(duration: Duration(microseconds: 100), curve: Curves.bounceIn);
           },

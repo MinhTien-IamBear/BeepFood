@@ -1,13 +1,18 @@
-// import 'package:appbeepfooddelivery/page/bottomnav.dart';
 // import 'package:appbeepfooddelivery/page/home.dart';
 // import 'package:appbeepfooddelivery/page/login.dart';
+import 'package:appbeepfooddelivery/admin/admin_login.dart';
+import 'package:appbeepfooddelivery/page/home.dart';
 import 'package:appbeepfooddelivery/page/onboard.dart';
+import 'package:appbeepfooddelivery/widget/app_constant.dart';
 // import 'package:appbeepfooddelivery/page/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 void main() async{
+  
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = publishableKey;
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -40,7 +45,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Onboard(),
+      home: Home(),
     );
   }
 }

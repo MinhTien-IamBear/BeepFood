@@ -1,7 +1,16 @@
+
+import 'package:appbeepfooddelivery/page/bottomnav.dart';
+import 'package:appbeepfooddelivery/page/forgotpassword.dart';
 import 'package:appbeepfooddelivery/page/signup.dart';
 import 'package:appbeepfooddelivery/widget/widget_support.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+// import 'package:appfooddelivery/page/bottomnav.dart';
+// import 'package:appfooddelivery/page/forgotpassword.dart';
+// import 'package:appfooddelivery/page/signup.dart';
+// import 'package:appfooddelivery/widget/widget_support.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -11,95 +20,232 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  String email = "", password = "";
+
+  TextEditingController passwordController = new TextEditingController();
+  TextEditingController emailController = new TextEditingController();
+
+  final _formkey = GlobalKey<FormState>();
+
+  userLogin() async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      ScaffoldMessenger.of(context).showSnackBar((SnackBar(
+        content:
+            Text("Đăng nhập thành công!", style: TextStyle(fontSize: 20.0)),
+      )));
+      Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
+          context, MaterialPageRoute(builder: (context) => BottomNav()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+          "Không tìm thấy người dùng nào cho email đó",
+          style: TextStyle(fontSize: 18.0, color: Colors.black),
+        )));
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+          "Sai mật khẩu",
+          style: TextStyle(fontSize: 18.0, color: Colors.black),
+        )));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Stack(children: [
-        Container(
-         width: MediaQuery.of(context).size.width,
-         height: MediaQuery.of(context).size.height/2.5,
-         decoration: BoxDecoration(gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-          Color(0xFFff5c30), 
-          Color(0xFFe74b1a),
-         ])),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/3),
-          height: MediaQuery.of(context).size.height/2,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))),
-          child: 
-            Text(""),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
-            child: Column(children: [
-              Center(child: Image.asset("images/logo_login.png", 
-              width: MediaQuery.of(context).size.width/2.5, fit: BoxFit.cover,)),
-              SizedBox(height: 7.0,),
-              Material(
-                elevation: 5.0,
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height/2,
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
-                  child: Column(children: [
-                    SizedBox(height: 20.0,),
-                    Text("Đăng Nhập", style: AppWidget.HeadlineTextFeildStyle()),
-                    SizedBox(height: 30.0,),
-                    TextField(
-                      decoration: InputDecoration(hintText: 'Email', 
-                      hintStyle: AppWidget.semiBoldTextFeildStyle(),
-                      prefixIcon: Icon(Icons.email_outlined),
+        child: Stack(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2.5,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                    Color(0xFFff5c30),
+                    Color(0xFFe74b1e),
+                  ])),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height / 2.5),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40))),
+              child: Text(""),
+            ),
+            SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
+                child: Column(
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        "images/logo_login.png",
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    SizedBox(height: 30.0,),
-                    TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(hintText: 'Mật Khẩu', 
-                      hintStyle: AppWidget.semiBoldTextFeildStyle(),
-                      prefixIcon: Icon(Icons.password_outlined),
-                      ),
+                    SizedBox(
+                      height: 50.0,
                     ),
-                    SizedBox(height: 20.0,),
-                    Container(
-                      alignment: Alignment.topRight,
-                      child: Text("Quên Mật Khẩu?", style: AppWidget.semiBoldTextFeildStyle(),)), 
-                      SizedBox(height: 80.0,),
-                      Material(
-                        borderRadius: BorderRadius.circular(20),
-                        elevation: 5.0,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 8.0),
-                          width: 200,
-                          decoration: BoxDecoration(color: Color(0Xffff5722), borderRadius: BorderRadius.circular(20)),
-                          child: Center(
-                            child: Text("ĐĂNG NHẬP", 
-                            style: TextStyle(color: Colors.white, 
-                            fontSize: 18.0, 
-                            fontFamily: 'Poppins1', 
-                            fontWeight: FontWeight.bold),),
+                    Material(
+                      elevation: 5.0,
+                      borderRadius: BorderRadius.circular(30),
+                      child: Container(
+                        padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height / 2,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Form(
+                          key: _formkey,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 30.0,
+                              ),
+                              Text(
+                                "Đăng nhập",
+                                style: AppWidget.HeadlineTextFeildStyle(),
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              TextFormField(
+                                controller: emailController,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Vui lòng nhập email';
+                                  }
+                                  return null;
+                                },
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 20,
+                                ),
+                                textCapitalization: TextCapitalization.words,
+                                decoration: InputDecoration(
+                                    hintText: 'Email',
+                                    hintStyle:
+                                        AppWidget.semiBoldTextFeildStyle(),
+                                    prefixIcon: Icon(Icons.email_outlined)),
+                              ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              TextFormField(
+                                controller: passwordController,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Vui lòng nhập mật khẩu';
+                                  }
+                                  return null;
+                                },
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 20,
+                                ),
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                    hintText: 'Mật khẩu',
+                                    hintStyle:
+                                        AppWidget.semiBoldTextFeildStyle(),
+                                    prefixIcon: Icon(Icons.password_outlined)),
+                                cursorColor: Colors.yellow,
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ForgotPassword()));
+                                },
+                                child: Container(
+                                    alignment: Alignment.topRight,
+                                    child: Text(
+                                      "Quên mật khẩu?",
+                                      style: AppWidget.semiBoldTextFeildStyle(),
+                                    )),
+                              ),
+                              SizedBox(
+                                height: 50.0,
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  if (_formkey.currentState!.validate()) {
+                                    setState(() {
+                                      email = emailController.text;
+                                      password = passwordController.text;
+                                    });
+                                  }
+                                  userLogin();
+                                },
+                                child: Material(
+                                  elevation: 5.0,
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8.0),
+                                    width: 200,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xffff5722),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Center(
+                                      child: Text(
+                                        "Đăng nhập",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Poppins1',
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                      )
-                  ],),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50.0,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignUp()));
+                      },
+                      child: Text(
+                        "Bạn chưa có tài khoản? Đăng ký",
+                        style: AppWidget.semiBoldTextFeildStyle(),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              SizedBox(height: 70.0,),
-              GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
-                },
-                child: Text("Bạn chưa có tài khoản? Đăng Ký", style: AppWidget.semiBoldTextFeildStyle(),)),
-            ],),
-          )
-      ],),),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
